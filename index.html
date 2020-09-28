@@ -1,92 +1,32 @@
-<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="en-us">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>webGl</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <title>%UNITY_WEB_NAME%</title>
     <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <script src="TemplateData/UnityProgress.js"></script>
+    <link rel="stylesheet" href="css/webvr.css">
   </head>
-  <body class="dark">
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas"></canvas>
-    </div>
-    <div id="loading-cover" style="display:none;">
-      <div id="unity-loading-bar">
-        <div id="unity-logo"><img src="logo.png"></div>
-        <div id="unity-progress-bar-empty" style="display: none;">
-          <div id="unity-progress-bar-full"></div>
-        </div>
-        <div class="spinner"></div>
+  <body class="template" data-unity-width="960" data-unity-height="600" data-unity-loaded="false" data-vr-loaded="false" data-supports-vr="false">
+    <p class="header"><span>Unity WebGL Player | </span>%UNITY_WEB_NAME%</p>
+    <div class="template-wrap clear">
+      <div class="canvas-wrapper" style="width: %UNITY_WIDTH%px; height: %UNITY_HEIGHT%px" data-vr-presentation-text="Put on your VR headset now">
+        <canvas class="emscripten" id="canvas" height="%UNITY_HEIGHT%" width="%UNITY_WIDTH%"></canvas>
       </div>
+      <div class="logo"></div>
+      <div class="fullscreen">
+        <button id="btnVrToggle" class="btn btnVr btnVrToggle waiting" data-enter-vr-title="Enter VR" data-exit-vr-title="Exit VR" title="Enter VR">Enter VR</button>
+        <div class="vr">
+          <button id="btnVrReset" class="btn btnVr btnVrReset waiting" title="Reset View">Reset View</button>
+          <button id="btnFsEnter" class="btn btnFsEnter waiting" title="Fullscreen">Fullscreen</button>
+        </div>
+      </div>
+      <div class="title">%UNITY_WEB_NAME%</div>
     </div>
-    <div id="unity-fullscreen-button" style="display: none;"></div>
-    <script>
-      const hideFullScreenButton = "";
-      const buildUrl = "Build";
-      const loaderUrl = buildUrl + "/WebGlBin_test.loader.js";
-      const config = {
-        dataUrl: buildUrl + "/WebGlBin_test.data",
-        frameworkUrl: buildUrl + "/WebGlBin_test.framework.js",
-        codeUrl: buildUrl + "/WebGlBin_test.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "DefaultCompany",
-        productName: "webGl",
-        productVersion: "0.1",
-      };
-
-      const container = document.querySelector("#unity-container");
-      const canvas = document.querySelector("#unity-canvas");
-      const loadingCover = document.querySelector("#loading-cover");
-      const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
-      const progressBarFull = document.querySelector("#unity-progress-bar-full");
-      const fullscreenButton = document.querySelector("#unity-fullscreen-button");
-      const spinner = document.querySelector('.spinner');
-
-      const canFullscreen = (function() {
-        for (const key of [
-            'exitFullscreen',
-            'webkitExitFullscreen',
-            'webkitCancelFullScreen',
-            'mozCancelFullScreen',
-            'msExitFullscreen',
-          ]) {
-          if (key in document) {
-            return true;
-          }
-        }
-        return false;
-      }());
-
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        container.className = "unity-mobile";
-        config.devicePixelRatio = 1;
-      }
-      loadingCover.style.display = "";
-
-      const script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          spinner.style.display = "none";
-          progressBarEmpty.style.display = "";
-          progressBarFull.style.width = `${100 * progress}%`;
-        }).then((unityInstance) => {
-          loadingCover.style.display = "none";
-          if (canFullscreen) {
-            if (!hideFullScreenButton) {
-              fullscreenButton.style.display = "";
-            }
-            fullscreenButton.onclick = () => {
-              unityInstance.SetFullscreen(1);
-            };
-          }
-        }).catch((message) => {
-          alert(message);
-        });
-      };
-      document.body.appendChild(script);
-    </script>
+    <p class="footer">&laquo; created with <a href="http://unity3d.com/" title="Go to unity3d.com">Unity</a> &raquo;</p>
+    %UNITY_WEBGL_LOADER_GLUE%
+    <script src="js/three.min.js"></script>
+    <script src="js/UnityWebVRManager.js"></script>
   </body>
 </html>
